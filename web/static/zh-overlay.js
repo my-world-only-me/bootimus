@@ -669,8 +669,21 @@
   var SKIP_TAGS = { SCRIPT: 1, STYLE: 1, PRE: 1, CODE: 1, TEXTAREA: 1, KBD: 1, SAMP: 1 };
   var SKIP_CLASS = 'zh-overlay-skip';
 
+  // Elements that i18n.js owns. Its dict is authoritative for them, and some
+  // assertions (and users) expect the exact i18n wording, so never touch a
+  // node whose text or attribute is already managed through a data-i18n key.
+  var I18N_ATTRS = ['data-i18n', 'data-i18n-title', 'data-i18n-placeholder', 'data-i18n-aria-label'];
+
   function active() {
     return document.documentElement.lang === 'zh-CN';
+  }
+
+  function i18nOwned(el) {
+    if (!el || !el.hasAttribute) return false;
+    for (var i = 0; i < I18N_ATTRS.length; i++) {
+      if (el.hasAttribute(I18N_ATTRS[i])) return true;
+    }
+    return false;
   }
 
   function usable(el) {
@@ -678,6 +691,7 @@
       if (SKIP_TAGS[n.tagName]) return false;
       if (n.classList && n.classList.contains(SKIP_CLASS)) return false;
       if (n.hasAttribute && n.hasAttribute('data-zh-skip')) return false;
+      if (i18nOwned(n)) return false;
     }
     return true;
   }
@@ -751,7 +765,8 @@
     run(document.body);
     observe();
 
-    // Re-run after the upstream language switcher changes the UI.
+    // Re-run after the upstream language switcher changes the UI. Wrapping the
+    // function (rather than editing i18n.js) keeps upstream updates conflict-free.
     if (typeof window.setLanguage === 'function') {
       var original = window.setLanguage;
       window.setLanguage = function (lang) {
