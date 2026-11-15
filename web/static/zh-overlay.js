@@ -639,9 +639,8 @@
   var SKIP_TAGS = { SCRIPT: 1, STYLE: 1, PRE: 1, CODE: 1, TEXTAREA: 1, KBD: 1, SAMP: 1 };
   var SKIP_CLASS = 'zh-overlay-skip';
 
-  // Elements that i18n.js owns. Its dict is authoritative for them, and some
-  // assertions (and users) expect the exact i18n wording, so never touch a
-  // node whose text or attribute is already managed through a data-i18n key.
+  // i18n.js owns these subtrees. Its dictionary is authoritative and some tests
+  // assert its exact wording, so the overlay must never touch them.
   var I18N_ATTRS = ['data-i18n', 'data-i18n-title', 'data-i18n-placeholder', 'data-i18n-aria-label'];
 
   function active() {
@@ -672,7 +671,7 @@
     var trimmed = raw.trim();
     if (!trimmed || trimmed.length > 400) return;
     var zh = ZH[trimmed];
-    if (!zh) return;
+    if (!zh || zh === trimmed) return;
     if (!usable(node.parentNode)) return;
     var start = raw.indexOf(trimmed);
     node.nodeValue = raw.slice(0, start) + zh + raw.slice(start + trimmed.length);
@@ -691,6 +690,8 @@
     }
   }
 
+  // Translate one subtree. Text nodes are collected first so mutation of the
+  // tree cannot disturb the walk.
   function walk(root) {
     if (!root) return;
     if (root.nodeType === 3) { translateText(root); return; }
@@ -716,41 +717,35 @@
     try { walk(root || document.body); } finally { busy = false; }
   }
 
+  // Only newly inserted markup is considered. characterData is deliberately not
+  // observed: i18n.js rewrites text in place, and reacting to that would make
+  // the two translators fight over the same node.
   function observe() {
+    if (typeof MutationObserver === 'undefined') return;
     var mo = new MutationObserver(function (records) {
       if (!active()) return;
       for (var i = 0; i < records.length; i++) {
-        var r = records[i];
-        if (r.type === 'characterData') { run(r.target); continue; }
-        for (var j = 0; j < r.addedNodes.length; j++) {
-          var node = r.addedNodes[j];
+        var added = records[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var node = added[j];
           if (node.nodeType === 1 || node.nodeType === 3) run(node);
         }
       }
     });
-    mo.observe(document.body, { childList: true, subtree: true, characterData: true });
+    mo.observe(document.body, { childList: true, subtree: true });
   }
 
   function boot() {
-    run(document.body);
-    observe();
-
-    // Re-run after the upstream language switcher changes the UI. Wrapping the
-    // function (rather than editing i18n.js) keeps upstream updates conflict-free.
-    if (typeof window.setLanguage === 'function') {
-      var original = window.setLanguage;
-      window.setLanguage = function (lang) {
-        original.apply(this, arguments);
-        setTimeout(function () { run(document.body); }, 0);
-      };
-    }
-
-    // Late renders (modals, tables, logs) that swap innerHTML wholesale.
-    setInterval(function () { run(document.body); }, 1500);
+    // i18n.js applies its dictionary on DOMContentLoaded; defer one tick so the
+    // overlay only fills gaps i18n left behind.
+    setTimeout(function () {
+      run(document.body);
+      observe();
+    }, 0);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { setTimeout(boot, 0); });
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
   }
