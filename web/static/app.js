@@ -1261,6 +1261,43 @@ function downloadISOFromProperties() {
     document.body.removeChild(a);
 }
 
+// Configuration values come from the server as readymade English strings, some
+// with dynamic parts (hosts, URLs, share counts, error text). Translate them by
+// configuration key and keep the dynamic parts intact.
+function configValueLabel(key, value) {
+    if (value === undefined || value === null || value === '') return value;
+    const raw = String(value);
+    if (typeof currentLanguage === 'function' && currentLanguage() !== 'zh-CN') return raw;
+
+    const T = {
+        disabled: 'server.value.disabled',
+        enabled: 'server.value.enabled',
+        available: 'server.value.available',
+        unavailable: 'server.value.unavailable',
+    };
+    const exact = {
+        'Disabled': T.disabled,
+        'Enabled': T.enabled,
+        'Available': T.available,
+        'Disabled (plain HTTP)': 'server.value.admin_tls_off',
+        'Disabled (external DHCP must set next-server/bootfile)': 'server.value.proxy_dhcp_off',
+        'Enabled (standalone \u2014 no external DHCP PXE config needed)': 'server.value.proxy_dhcp_on',
+        'Requested but unavailable (install samba and ensure smbd is in PATH)': 'server.value.smb_unavailable',
+        'Unavailable (install wimtools / wimlib-imagex to enable boot.wim patching)': 'server.value.patcher_missing',
+    };
+    if (exact[raw]) return t(exact[raw]);
+
+    // "Requested but not running: <error>"
+    const notRunning = raw.match(/^Requested but not running: ?([\s\S]*)$/);
+    if (notRunning) return t('server.value.smb_not_running') + ' ' + notRunning[1];
+
+    // "Enabled (N share(s) active, port P)"
+    const smbActive = raw.match(/^Enabled \((\d+) share\(s\) active, port (\d+)\)$/);
+    if (smbActive) return t('server.value.smb_active', { n: smbActive[1], port: smbActive[2] });
+
+    return raw;
+}
+
 function renderServerInfo(info) {
     const container = document.getElementById('server-info');
     const sysStats = info.system_stats || {};
@@ -1376,7 +1413,7 @@ function renderServerInfo(info) {
     const configItems = Object.entries(info.configuration || {}).filter(([key]) => key !== 'runtime_mode').map(([key, value]) => `
         <div class="info-item">
             <span class="info-label">${configLabel(key)}</span>
-            <span class="info-value">${value || '<em style="color:var(--text-muted)">-</em>'}</span>
+            <span class="info-value">${configValueLabel(key, value) || '<em style="color:var(--text-muted)">-</em>'}</span>
         </div>
     `).join('');
 

@@ -1687,6 +1687,20 @@ const TRANSLATIONS = {
         'drivers.uploading': '正在上传 {{name}}…',
         'drivers.request_failed': '驱动请求失败，请重试。',
 
+        'server.value.disabled': '已禁用',
+        'server.value.enabled': '已启用',
+        'server.value.available': '可用',
+        'server.value.unavailable': '不可用',
+        'server.value.docker': 'Docker',
+        'server.value.native': '裸机',
+        'server.value.admin_tls_off': '已禁用（纯 HTTP）',
+        'server.value.proxy_dhcp_off': '已禁用（需由外部 DHCP 设置 next-server/bootfile）',
+        'server.value.proxy_dhcp_on': '已启用（独立模式 — 无需外部 DHCP 的 PXE 配置）',
+        'server.value.smb_unavailable': '已请求但不可用（请安装 samba 并确保 smbd 在 PATH 中）',
+        'server.value.smb_not_running': '已请求但未运行：',
+        'server.value.smb_active': '已启用（{{n}} 个共享，端口 {{port}}）',
+        'server.value.patcher_missing': '不可用（安装 wimtools / wimlib-imagex 后方可为 boot.wim 打补丁）',
+
         'lang.label': '语言',
     },
 };
