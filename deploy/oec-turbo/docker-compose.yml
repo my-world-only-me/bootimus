@@ -1,0 +1,53 @@
+# Bootimus — slim deployment for OEC-Turbo (RK3588, aarch64)
+#
+# Single container, embedded SQLite, image published from GHCR by the
+# "Slim image" workflow (Dockerfile.slim). No PostgreSQL, no Samba.
+#
+# Expected image: ghcr.io/my-world-only-me/bootimus:latest
+# If GHCR is unreachable from the device, mirror it first:
+#   docker pull docker.1panel.live/my-world-only-me/bootimus:latest
+#   docker tag  docker.1panel.live/my-world-only-me/bootimus:latest \
+#               ghcr.io/my-world-only-me/bootimus:latest
+
+services:
+  bootimus:
+    image: ghcr.io/my-world-only-me/bootimus:latest
+    container_name: bootimus
+    hostname: bootimus
+    restart: unless-stopped
+
+    environment:
+      BOOTIMUS_DATA_DIR: /data
+      # SQLite mode: no BOOTIMUS_DB_* variables on purpose.
+      BOOTIMUS_TFTP_PORT: "69"
+      BOOTIMUS_HTTP_PORT: "8080"
+      BOOTIMUS_ADMIN_PORT: "8081"
+      # Pinned so the boot menu advertises a client-reachable address instead
+      # of a container-internal one. Update if OEC-Turbo's LAN IP changes.
+      BOOTIMUS_SERVER_ADDR: "192.168.1.2"
+      TZ: Asia/Shanghai
+
+    ports:
+      - "69:69/udp"      # TFTP
+      - "8080:8080/tcp"  # HTTP boot files / API
+      - "8081:8081/tcp"  # admin UI
+
+    volumes:
+      - ./data:/data
+
+    # TFTP listens on a privileged port.
+    cap_add:
+      - NET_BIND_SERVICE
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8081/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
