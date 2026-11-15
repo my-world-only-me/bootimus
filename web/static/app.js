@@ -4750,9 +4750,9 @@ async function loadUSBImages() {
         }
         html += '</tbody></table></div>';
         html += `<div style="margin-top: 15px; padding: 15px; background: var(--bg-secondary); border-radius: 8px; color: var(--text-secondary); font-size: 13px;">
-            <strong style="color: var(--accent);">Writing to USB:</strong><br>
+            <strong style="color: var(--accent);">${t('usb.writing')}</strong><br>
             <code style="color: var(--text-primary);">sudo dd if=bootimus.usb of=/dev/sdX bs=4M status=progress</code><br><br>
-            Replace <code>/dev/sdX</code> with your USB device. The USB boots iPXE which uses DHCP to find bootimus automatically.
+            ${t('usb.replace_device')}
         </div>`;
         container.innerHTML = html;
     } catch (err) {
@@ -7903,7 +7903,7 @@ function renderAutoInstallFilesTable() {
     ]));
 
     if (!files.length) {
-        container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px;">No auto-install files yet. Click <strong>New File</strong> or <strong>Upload File</strong> to add one.</p>';
+        container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px;">' + t('autoinstall.empty') + '</p>';
         return;
     }
 
@@ -9384,11 +9384,11 @@ async function loadTOTPStatus() {
         }
         card.style.display = '';
         if (me.totp_enabled) {
-            status.innerHTML = `<span class="badge badge-success">Enabled</span> Two-factor authentication is on for <strong>${escapeHtml(me.username)}</strong>.
-                <button type="button" class="btn btn-sm" style="margin-left: 10px;" onclick="disableTOTP()">Disable</button>`;
+            status.innerHTML = `<span class="badge badge-success">${t('totp.enabled_badge')}</span> ${t('totp.on_for', { user: '' })}<strong>${escapeHtml(me.username)}</strong>.
+                <button type="button" class="btn btn-sm" style="margin-left: 10px;" onclick="disableTOTP()">${t('totp.disable')}</button>`;
         } else {
-            status.innerHTML = `<span class="badge badge-warning">Off</span> Two-factor authentication is not enabled for <strong>${escapeHtml(me.username)}</strong>.
-                <button type="button" class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="startTOTPSetup()">Set up</button>`;
+            status.innerHTML = `<span class="badge badge-warning">${t('totp.off_badge')}</span> ${t('totp.not_enabled_for')} <strong>${escapeHtml(me.username)}</strong>.
+                <button type="button" class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="startTOTPSetup()">${t('totp.setup')}</button>`;
         }
     } catch (err) {
         status.textContent = 'Could not load two-factor status';
@@ -9529,8 +9529,8 @@ function renderDiskImagingProblems() {
         banner.style.display = 'none';
         return;
     }
-    banner.innerHTML = '<strong>Disk imaging is not ready.</strong> ' + problems.map(escapeHtml).join(' ') +
-        ' Enable the Clonezilla tool under <strong>Tools</strong> and start Bootimus with <code>--nfs-enabled</code>.';
+    banner.innerHTML = '<strong>' + t('disk.not_ready') + '</strong> ' + problems.map(escapeHtml).join(' ') +
+        ' ' + t('disk.enable_hint');
     banner.style.display = 'block';
 }
 
