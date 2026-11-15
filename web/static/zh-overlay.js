@@ -77,7 +77,7 @@
  "Assign to Client Group": "分配到客户端组",
  "Assign to Group": "分配到客户端组",
  "Assigned Images": "已分配的镜像",
- "Audit Log": "审计日志",
+ "Audit Log": "审计",
  "Audit log retention (days)": "审计日志保留（天）",
  "Authenticator or recovery code": "身份验证器验证码或恢复码",
  "Auto (next-boot, then first image)": "自动（先下次引导，再首个镜像）",
