@@ -1,0 +1,501 @@
+/* Bootimus admin UI — Simplified Chinese overlay.
+ *
+ * The upstream UI marks only its navigation shell with data-i18n; most of the
+ * page body is hard-coded English in index.html and app.js. This file adds a
+ * runtime translation layer: after the page renders (and whenever the DOM
+ * changes) it replaces known English UI strings with Chinese.
+ *
+ * Scope rules:
+ *   - only active while the selected language is zh-CN
+ *   - never touches script/style/pre/code, form values or user data
+ *   - text the user typed is left untouched (no matching entry)
+ */
+(function () {
+  'use strict';
+
+  var ZH = {
+ "(custom)": "（自定义）",
+ "(inherit from group or image)": "（继承自客户端组或镜像）",
+ "(inherit from group)": "（继承自客户端组）",
+ "(inherit from group, or none)": "（继承自客户端组，或无）",
+ "(inherit from image)": "（继承自镜像）",
+ "(none)": "（无）",
+ "(select a cluster)": "（选择一个集群）",
+ "+ Add schedule": "+ 添加计划任务",
+ "0 = never": "0 = 从不",
+ "A job stays pending until the client PXE boots, runs while Clonezilla works, and is completed or failed when the client reports back. Pending and running jobs can be cancelled.": "任务在客户端 PXE 引导之前保持待执行状态，Clonezilla 工作期间处于运行中，客户端回报后标记为完成或失败。待执行和运行中的任务都可以取消。",
+ "API Reference": "API 参考",
+ "Action when the timeout fires. Set to": "超时触发时执行的动作。设置为",
+ "Add Client Group": "添加客户端组",
+ "Add Cluster": "添加集群",
+ "Add Node": "添加节点",
+ "Add Node Image": "添加节点镜像",
+ "Admin": "管理员",
+ "Administrator": "管理员",
+ "Agama (openSUSE Leap 16 / Tumbleweed)": "Agama（openSUSE Leap 16 / Tumbleweed）",
+ "Always offered in the menu of every client using this profile, even when it is private.": "即使该镜像为私有，它也会始终出现在使用此配置档案的所有客户端的菜单中。",
+ "Answer file (Proxmox VE)": "应答文件（Proxmox VE）",
+ "Any": "任意",
+ "Apply to existing clients": "应用到现有客户端",
+ "Applying…": "正在应用……",
+ "Are you sure you want to delete all extracted boot files? This will reset the image to sanboot mode. The autoinstall folder will be preserved.": "确定要删除所有已解压的引导文件吗？这会把该镜像重置为 sanboot 模式。autoinstall 目录会被保留。",
+ "Are you sure you want to delete this file?": "确定要删除该文件吗？",
+ "Assign": "分配",
+ "Assign selected clients to a group": "将选中的客户端分配到组",
+ "Assign selected images to a group": "将选中的镜像分配到组",
+ "Audit Log": "审计日志",
+ "Authenticator or recovery code": "身份验证器验证码或恢复码",
+ "Auto (next-boot, then first image)": "自动（先下次引导，再首个镜像）",
+ "Auto-refresh client list every 5 seconds": "每 5 秒自动刷新客户端列表",
+ "Auto-refreshing (every 2s)": "自动刷新中（每 2 秒）",
+ "AutoYaST (openSUSE Leap 15 / SLES 15)": "AutoYaST（openSUSE Leap 15 / SLES 15）",
+ "Autoinstall (Ubuntu cloud-init)": "自动安装（Ubuntu cloud-init）",
+ "Autoinstall (Ubuntu)": "自动安装（Ubuntu）",
+ "Autounattend (Windows)": "Autounattend（Windows）",
+ "BMC (Power Control)": "BMC（电源控制）",
+ "BMC Defaults": "BMC 默认值",
+ "Blank = use server default.": "留空 = 使用服务器默认值。",
+ "Blank protocol/username/password/port inherit from the client group. Host is always per-client (each BMC has its own IP).": "协议/用户名/密码/端口留空则继承客户端组的设置。主机地址始终按客户端单独指定（每台 BMC 都有自己的 IP）。",
+ "Boot Menu": "引导菜单",
+ "Boot Method": "引导方式",
+ "Boot from Local Disk": "从本地磁盘引导",
+ "Boot from SAN by default": "默认从 SAN 引导",
+ "Boot log retention (days)": "引导日志保留（天）",
+ "Bootimus - Boot Menu": "Bootimus - 引导菜单",
+ "Bootloaders": "引导加载器",
+ "Brief description": "简要说明",
+ "Brief description of this file": "该文件的简要说明",
+ "CHAP Authentication": "CHAP 认证",
+ "CHAP Username": "CHAP 用户名",
+ "CSV columns:": "CSV 列：",
+ "Cancel": "取消",
+ "Cancel this job? A capture in progress will be discarded.": "确定要取消该任务吗？正在进行的捕获将被丢弃。",
+ "Cannot load answer files. Reopen this form before saving.": "无法加载应答文件。请重新打开此表单后再保存。",
+ "Capture a client's disk into an image with Clonezilla, then deploy that image to one client or a whole client group on their next PXE boot. Images are stored under": "使用 Clonezilla 将客户端磁盘捕获为镜像，然后在下次 PXE 引导时把该镜像部署到单个客户端或整个客户端组。镜像保存在",
+ "Chain (EFI)": "链式加载（EFI）",
+ "Check now": "立即检查",
+ "Check the catalogue daily for newer releases of installed images and tools": "每天检查已安装镜像和工具是否有更新的版本",
+ "Checking the catalogue…": "正在检查镜像目录……",
+ "Clear": "清空",
+ "Clear Next Boot": "清除「下次引导」",
+ "Clear Next Boot on All": "清除全部「下次引导」",
+ "Clear selection": "清除选择",
+ "Client Groups": "客户端组",
+ "Client group": "客户端组",
+ "Client:": "客户端：",
+ "Clients": "客户端",
+ "Clonezilla image to deploy when the first-boot action is \"Deploy disk image\".": "当首次引导动作为「部署磁盘镜像」时要部署的 Clonezilla 镜像。",
+ "Close": "关闭",
+ "Configure the PXE boot menu seen by clients — title, timeout, and default fallback action. Console resolution may not be supported by all iPXE firmware builds.": "配置客户端看到的 PXE 引导菜单——标题、超时时间以及默认回退动作。控制台分辨率并非所有 iPXE 固件版本都支持。",
+ "Connection error": "连接错误",
+ "Control plane machine config": "控制平面机器配置",
+ "Copy": "复制",
+ "Could not load two-factor status": "无法加载双重认证状态",
+ "Could not resolve effective settings": "无法解析实际生效的设置",
+ "Create Client": "创建客户端",
+ "Create Cluster": "创建集群",
+ "Create Group": "创建组",
+ "Create Profile": "创建配置档案",
+ "Create Schedule": "创建计划任务",
+ "Create Set": "创建集合",
+ "Create Token": "创建令牌",
+ "Create Tool": "创建工具",
+ "Create User": "创建用户",
+ "Creates a directory in": "创建目录于",
+ "Daily at 03:00": "每天 03:00",
+ "Data directory usage": "数据目录占用",
+ "Default (global setting)": "默认（全局设置）",
+ "Default installation config for every machine in this group. Individual clients can still override.": "该客户端组内每台机器的默认安装配置。单个客户端仍可覆盖。",
+ "Delay between each WOL/next-boot action to avoid broadcast storms.": "每个 WOL/下次引导操作之间的间隔，用于避免广播风暴。",
+ "Delete": "删除",
+ "Delete selected clients": "删除选中的客户端",
+ "Delete selected images": "删除选中的镜像",
+ "Delete this schedule?": "确定要删除该计划任务吗？",
+ "Deploy Disk Image to All…": "向全部部署磁盘镜像……",
+ "Deployment Profiles": "部署配置档案",
+ "Description": "说明",
+ "Direct link to .iso file": "指向 .iso 文件的直链",
+ "Disable selected clients": "停用选中的客户端",
+ "Disable selected images": "停用选中的镜像",
+ "Discard the staged or failed restore?": "要丢弃已暂存或失败的恢复任务吗？",
+ "Disk Images": "磁盘镜像",
+ "Dismiss": "忽略",
+ "Download": "下载",
+ "Download a": "下载",
+ "Download bootable USB images for machines that don't support PXE network booting. Write to a USB stick and boot from it to access the bootimus menu.": "为不支持 PXE 网络引导的机器下载可引导 U 盘镜像。写入 U 盘后从它引导，即可进入 bootimus 菜单。",
+ "Download newer version": "下载新版本",
+ "Download popular Linux distributions directly from official mirrors. Switch the mirror per row, edit the URL freely if you need to point somewhere else, then hit Download.": "直接从官方镜像站下载常用 Linux 发行版。可按行切换镜像源；如需指向别处，可自由修改 URL，然后点击下载。",
+ "Drop to iPXE shell": "进入 iPXE 命令行",
+ "Edit Cluster": "编辑集群",
+ "Enable": "启用",
+ "Enable Auto-Install": "启用自动安装",
+ "Enable outbound webhook": "启用出站 Webhook",
+ "Enable selected clients": "启用选中的客户端",
+ "Enable selected images": "启用选中的镜像",
+ "Enabled": "已启用",
+ "Enrolment Rules": "自动纳管规则",
+ "Enter your auto-install script content here...": "在此输入你的自动安装脚本内容……",
+ "Enter your password to turn off two-factor authentication:": "请输入密码以关闭双重认证：",
+ "Every 15 minutes": "每 15 分钟",
+ "Every DHCP packet the built-in proxyDHCP responder has seen, with the decision Bootimus took: which bootfile it offered, or why it stayed silent. Use this when a client fails to PXE boot before you reach for tcpdump.": "内置 proxyDHCP 响应器收到的每一个 DHCP 数据包，以及 Bootimus 所做的决策：提供了哪个引导文件，或为何保持静默。当客户端 PXE 引导失败时，先看这里，再去考虑 tcpdump。",
+ "Every change made through the admin API: who did it, what was called and how the server answered. Reads are not recorded.": "通过管理 API 进行的每一次变更：由谁执行、调用了什么接口、服务器如何响应。只读请求不会被记录。",
+ "Every hour": "每小时",
+ "Extracting...": "正在解压……",
+ "File": "文件",
+ "File *": "文件 *",
+ "Filename of the image to set as the next boot": "要设为下次引导的镜像文件名",
+ "Fill in at least one condition to see which existing clients would match.": "请至少填写一个条件，以查看哪些现有客户端会被匹配。",
+ "Filter by MAC, name or decision…": "按 MAC、名称或决策过滤……",
+ "Filter clients…": "过滤客户端……",
+ "Filter endpoints…": "过滤端点……",
+ "Filter files…": "过滤文件……",
+ "Filter groups…": "过滤客户端组……",
+ "Filter images…": "过滤镜像……",
+ "Filter profiles…": "过滤配置档案……",
+ "Filter targets…": "过滤目标……",
+ "Filter users…": "过滤用户……",
+ "Filter…": "过滤……",
+ "For clients that boot without iPXE: enter the exact kernel request path, including a directory unique to this client. A completed transfer counts as a boot attempt; retries within 30 seconds count once. Leave blank to disable.": "用于不通过 iPXE 引导的客户端：填写精确的内核请求路径，其中需包含该客户端专属的目录。一次完成的传输计为一次引导尝试；30 秒内的重试只计一次。留空则禁用。",
+ "Force Off": "强制关机",
+ "Force Off All": "全部强制关机",
+ "Generated from the server's OpenAPI document at": "根据服务器的 OpenAPI 文档生成，地址：",
+ "Graceful Off": "正常关机",
+ "Group clients by their assigned client group": "按客户端所属的客户端组进行分组",
+ "Group images by their assigned folder": "按镜像所属目录进行分组",
+ "Group overlay: inherits allowed images and participates in bulk actions.": "组叠加层：继承允许的镜像，并参与批量操作。",
+ "Hardware": "硬件",
+ "Hardware Information": "硬件信息",
+ "Hide public images": "隐藏公共镜像",
+ "Hold Ctrl/Cmd to select multiple. Clients can belong to only one group.": "按住 Ctrl/Cmd 可多选。每个客户端只能属于一个客户端组。",
+ "Hold Ctrl/Cmd to select multiple. Public images are shown separately if enabled above.": "按住 Ctrl/Cmd 可多选。若上方已启用，公共镜像会单独显示。",
+ "ISO Image": "ISO 镜像",
+ "Ignition (Fedora CoreOS / Flatcar)": "Ignition（Fedora CoreOS / Flatcar）",
+ "Image Filename": "镜像文件名",
+ "Image Groups": "镜像组",
+ "Image, auto-install file, SAN target, bootloader set and first-boot action applied at boot. Settings filled in on this form override the profile.": "引导时应用的镜像、自动安装文件、SAN 目标、引导加载器集以及首次引导动作。在此表单中填写的设置会覆盖配置档案中的对应项。",
+ "Image:": "镜像：",
+ "Images": "镜像",
+ "Import": "导入",
+ "Import Clients from CSV": "从 CSV 导入客户端",
+ "Import failed: ": "导入失败：",
+ "Include in autoinstall": "包含在自动安装中",
+ "Install History": "安装历史",
+ "Kernel/Binary Path": "内核/二进制路径",
+ "Kickstart (RHEL)": "Kickstart（RHEL）",
+ "Kickstart (RHEL/CentOS/Fedora/Rocky)": "Kickstart（RHEL/CentOS/Fedora/Rocky）",
+ "Kubernetes clusters that bootimus boots nodes into. Each cluster picks a node image for its OS; use Configure to edit or upload its join configs.": "bootimus 将节点引导加入的 Kubernetes 集群。每个集群会选定一个节点镜像来确定其操作系统；使用「配置」可编辑或上传其加入配置。",
+ "Leave as the client has it": "保持客户端当前设置",
+ "Leave blank to keep the current password. Checked separately from the menu password, including automatic boots. Direct image downloads remain accessible.": "留空则保持当前密码不变。与菜单密码分开校验，自动引导时也一样。直接下载镜像仍然可以访问。",
+ "Leave blank to keep the current password. Requires admin HTTPS and a compatible bootloader that trusts its certificate. Local boot stays available; image downloads are not protected.": "留空则保持当前密码不变。需要启用管理端 HTTPS，并使用信任其证书的兼容引导加载器。本地引导仍然可用；镜像下载不受保护。",
+ "Leave empty to keep original filename": "留空则保留原始文件名",
+ "Leave empty to use the cluster's default install disk.": "留空则使用该集群的默认安装磁盘。",
+ "Legacy BIOS": "传统 BIOS",
+ "Linux Distributions": "Linux 发行版",
+ "Live (refreshing every 2s)": "实时（每 2 秒刷新）",
+ "Loading answer files…": "正在加载应答文件……",
+ "Loading files...": "正在加载文件……",
+ "Loading...": "加载中……",
+ "Loading…": "加载中……",
+ "Locked menu timeout (seconds)": "锁定菜单超时（秒）",
+ "Logs": "日志",
+ "Long-lived tokens for scripts and integrations. Send one as": "供脚本和集成使用的长期令牌。将其作为",
+ "Lower runs first.": "数值较小的先执行。",
+ "Lower-case letters, digits, dots, dashes and underscores": "小写字母、数字、点、短横线和下划线",
+ "Lower-case letters, digits, dots, dashes and underscores. Becomes the directory name.": "仅限小写字母、数字、点、短横线和下划线。该名称会成为目录名。",
+ "MAC prefix": "MAC 前缀",
+ "Make the client static": "将该客户端设为静态",
+ "Matches no existing client.": "没有匹配任何现有客户端。",
+ "Max file size: 100MB. Files will be automatically downloaded during OS installation.": "最大文件大小 100MB。文件会在操作系统安装过程中被自动下载。",
+ "Max file size: 100MB. This file will be available to all clients.": "最大文件大小 100MB。该文件将对所有客户端可用。",
+ "Members inherit these on top of their own allowlist.": "成员在自身允许列表之上继承这些项。",
+ "Members without their own SAN target inherit this one.": "没有单独设置 SAN 目标的成员将继承此项。",
+ "Members without their own profile use this one.": "没有单独设置配置档案的成员将使用此项。",
+ "Minimum 8 characters": "至少 8 个字符",
+ "NO AUTH": "无认证",
+ "Name": "名称",
+ "Name (unique ID)": "名称（唯一 ID）",
+ "Name *": "名称 *",
+ "New Auto-Install File": "新建自动安装文件",
+ "New password": "新密码",
+ "No +, ; or spaces (iPXE v2.0.0 compatibility).": "不能包含 +、; 或空格（兼容 iPXE v2.0.0）。",
+ "Node Images": "节点镜像",
+ "Nodes assigned to a cluster. Add a node by its MAC address. Reinstall wipes the node and reprovisions it on next PXE boot; Remove from cluster detaches the node.": "已分配给某集群的节点。通过 MAC 地址添加节点。重装会清空该节点并在下次 PXE 引导时重新部署；从集群移除则仅解除关联。",
+ "None": "无",
+ "None (Root Level)": "无（根层级）",
+ "Not run yet": "尚未运行",
+ "Omit PXE vendor option (43) from proxyDHCP offers": "在 proxyDHCP 响应中省略 PXE 厂商选项（43）",
+ "On": "开机",
+ "On / ForceOff / ForceRestart / GracefulShutdown / GracefulRestart": "开机 / 强制关机 / 强制重启 / 正常关机 / 正常重启",
+ "On its next PXE boot the client boots Clonezilla, saves the chosen disk into a new image on this server and powers off.": "在下次 PXE 引导时，客户端会启动 Clonezilla，将所选磁盘保存为本服务器上的新镜像，然后关机。",
+ "On the next PXE boot the target boots Clonezilla, restores the image over the chosen disk and reboots.": "在下次 PXE 引导时，目标机将启动 Clonezilla，把镜像恢复到所选磁盘，然后重启。",
+ "Only applied to unnamed clients. Placeholders:": "仅应用于未命名客户端。可用占位符：",
+ "Only applies before the global password is entered. Set a timeout to boot the local disk automatically; 0 waits indefinitely. Any key stops the countdown. Pending network boots remain queued until authentication.": "仅在输入全局密码之前生效。设置超时可在超时后自动从本地磁盘引导；设为 0 则无限等待。按任意键可停止倒计时。待执行的网络引导在通过认证前会一直排队。",
+ "Only auto-discovered clients. Static clients and cluster nodes are never removed.": "仅针对自动发现的客户端。静态客户端和集群节点永远不会被移除。",
+ "Open Console": "打开控制台",
+ "Operating system images that bootimus hosts and boots nodes with. Add an image for a provider, then download it so the kernel and initrd are cached locally. Clusters pick a node image to determine their OS.": "bootimus 托管并用于引导节点的操作系统镜像。先为某个提供方添加镜像，再下载它，使内核与 initrd 缓存到本地。集群通过选定节点镜像来确定其操作系统。",
+ "Optional": "可选",
+ "Optional description": "可选的说明",
+ "Optional kernel parameters": "可选的内核参数",
+ "Optional kernel params. Use {{HTTP_URL}} for server URL.": "可选的内核参数。使用 {{HTTP_URL}} 表示服务器地址。",
+ "Optional — auto-named if blank": "可选——留空则自动命名",
+ "Optional.": "可选。",
+ "Organise images into groups and subgroups for the PXE boot menu.": "将镜像整理为组和子组，用于 PXE 引导菜单。",
+ "Override the global bootloader set for this client.": "覆盖该客户端使用的全局引导加载器集。",
+ "Override the installation config for this machine specifically. Leave blank to inherit from the client group, or fall back to the image's default.": "仅针对本机覆盖安装配置。留空则继承客户端组的配置；若客户端组也没有，则回退到该镜像的默认配置。",
+ "Overview": "概览",
+ "POST a JSON payload to a URL when PXE events happen. Fire-and-forget, 10s timeout, no retries.": "发生 PXE 事件时向指定 URL POST 一个 JSON 载荷。发出后不等待结果，超时 10 秒，不重试。",
+ "PXE Debug": "PXE 调试",
+ "Password": "密码",
+ "Patch SMB": "应用 SMB 补丁",
+ "Path contains…": "路径包含……",
+ "Path within extracted archive or filename for binary": "二进制文件在已解压归档中的路径，或文件名",
+ "Paths to try inside the ISO": "在 ISO 内尝试查找的路径",
+ "Placeholders:": "占位符：",
+ "Port": "端口",
+ "Power (BMC)": "电源（BMC）",
+ "Power Action": "电源操作",
+ "Power On All": "全部开机",
+ "Power: ": "电源：",
+ "Preseed (Debian)": "Preseed（Debian）",
+ "Preseed (Debian/Ubuntu)": "Preseed（Debian/Ubuntu）",
+ "Preview unavailable": "预览不可用",
+ "Profile ID": "配置档案 ID",
+ "Protect your own account with a time-based one-time code from an authenticator app such as Aegis, Google Authenticator or 1Password. Applies to local accounts only; LDAP and OIDC users get their second factor from their identity provider.": "使用 Aegis、Google Authenticator 或 1Password 等身份验证器应用的限时一次性验证码来保护你自己的账户。仅适用于本地账户；LDAP 与 OIDC 用户由身份提供方完成二次验证。",
+ "Protocol": "协议",
+ "Provider config patch applied on top of the role config for this node.": "叠加在该节点角色配置之上的提供方配置补丁。",
+ "Prune old records once a day so the database does not grow without limit. Set a period to": "每天清理一次旧记录，避免数据库无限增长。设置保留周期为",
+ "Public (available to all clients)": "公共（对所有客户端可用）",
+ "Public Files": "公共文件",
+ "Querying…": "正在查询……",
+ "Queue Capture": "排队捕获",
+ "Queue Deploy": "排队部署",
+ "Re-verify against the recorded checksum, or paste another": "可依据已记录的校验和重新校验，或粘贴另一个",
+ "Read-only": "只读",
+ "Reboot": "重新引导",
+ "Record of all PXE boot attempts by clients.": "所有客户端 PXE 引导尝试的记录。",
+ "Recurring bulk actions against this group. All times are server-local.": "针对该客户端组的周期性批量操作。所有时间均为服务器本地时间。",
+ "Refresh": "刷新",
+ "Render the exact iPXE script a client would receive, without logging a boot or consuming its next-boot action. Leave the MAC as": "渲染客户端实际会收到的 iPXE 脚本，不会记录引导事件，也不会消耗其「下次引导」动作。MAC 留为",
+ "Reset Password": "重置密码",
+ "Restart": "重启",
+ "Restart All": "全部重启",
+ "Restore the original boot.wim and remove the SMB share": "还原原始的 boot.wim 并移除 SMB 共享",
+ "Rewrite boot.wim so WinPE auto-mounts the SMB share and launches setup.exe": "重写 boot.wim，使 WinPE 自动挂载 SMB 共享并启动 setup.exe",
+ "Run against all enabled members. Save any pending changes to membership first.": "对所有已启用的成员执行。请先保存对成员关系的待定修改。",
+ "Run every enabled rule over discovered clients that have no group, profile or rule yet?": "要对所有尚未设置客户端组、配置档案或规则的已发现客户端运行全部已启用的规则吗？",
+ "SAN Targets": "SAN 目标",
+ "SHA-256 or URL of a SHA256SUMS file": "SHA-256 值或 SHA256SUMS 文件 URL",
+ "SHA-256 or URL of a SHA256SUMS file to verify against": "用于校验的 SHA-256 值或 SHA256SUMS 文件 URL",
+ "Save": "保存",
+ "Save Changes": "保存修改",
+ "Save Configs": "保存配置",
+ "Save Configuration": "保存配置",
+ "Save Group": "保存客户端组",
+ "Scan with an authenticator app": "使用身份验证器应用扫描",
+ "Script will be served at: http://server:port/autoinstall/&lt;filename&gt;": "脚本将通过以下地址提供服务：http://server:port/autoinstall/&lt;filename&gt;",
+ "Select a distro…": "选择发行版……",
+ "Select an image to boot on the next PXE boot. This is a one-time action that clears after use.": "选择下次 PXE 引导时要启动的镜像。这是一次性动作，使用后自动清除。",
+ "Select one or more iPXE bootloader files (.efi, .kpxe, .usb, etc.).": "选择一个或多个 iPXE 引导加载器文件（.efi、.kpxe、.usb 等）。",
+ "Select the Windows answer files to offer after choosing this image. Leave all unticked to use the existing default automatically. A configured list waits for a choice, including automatic boots. A configured default is also offered.": "选择在选中此镜像后提供的 Windows 应答文件。全部不勾选则自动沿用现有默认项。一旦配置了列表，客户端需要手动选择（自动引导也不例外）。已配置的默认项同样会被提供。",
+ "Select the installation script format": "选择安装脚本格式",
+ "Send Wake-on-LAN now": "立即发送 Wake-on-LAN",
+ "Send Wake-on-LAN to selected clients": "向选中的客户端发送 Wake-on-LAN",
+ "Sending…": "正在发送……",
+ "Serial console over the client's BMC. Output appears only while the firmware or operating system writes to the serial port; press Enter if the screen stays blank.": "通过客户端 BMC 提供的串口控制台。只有当固件或操作系统向串口写入时才会显示输出；若屏幕一直空白，请按回车。",
+ "Set & Wake": "设置并唤醒",
+ "Set Next Boot": "设置下次引导",
+ "Set Next Boot Image": "设置下次引导镜像",
+ "Set Next Boot on All": "为全部设置「下次引导」",
+ "Settings": "设置",
+ "Shared protocol and credentials for group members. Individual clients can override. Host is per-client only.": "供组内成员共享的协议与凭据。单个客户端可以覆盖。主机地址只能按客户端单独设置。",
+ "Short description": "简短说明",
+ "Show history": "显示历史",
+ "Show public images": "显示公共镜像",
+ "Single Binary": "单文件二进制",
+ "Skip TLS verify": "跳过 TLS 校验",
+ "Skip the global menu password for this image only. Its own image password and client/profile visibility still apply. Shell, tools and other images remain locked.": "仅对此镜像跳过全局菜单密码。它自身的镜像密码以及客户端/配置的可见性限制仍然生效。命令行、工具和其他镜像仍保持锁定。",
+ "Some UEFI firmware (for example Intel I219-V) ignores proxyDHCP offers that carry option 43. Tick this if this machine never requests a bootfile.": "部分 UEFI 固件（例如 Intel I219-V）会忽略携带 option 43 的 proxyDHCP 响应。若本机从不请求引导文件，请勾选此项。",
+ "Start Download": "开始下载",
+ "Starting...": "正在启动……",
+ "Status": "状态",
+ "Stopped": "已停止",
+ "Substrings to match in ISO filenames": "用于匹配 ISO 文件名的子串",
+ "Syncing from the primary…": "正在从主实例同步……",
+ "The OS image nodes in this cluster boot. Manage images in the Node Images section.": "该集群中节点引导所使用的操作系统镜像。请在「节点镜像」页面管理镜像。",
+ "The latest inventory for each client is always kept.": "每个客户端的最新硬件清单始终保留。",
+ "The machine join configs nodes boot with. Edit them in the browser or upload files generated outside bootimus. Configs must match the cluster's node image provider. An empty field leaves that config unchanged.": "节点加入集群时使用的机器配置。可直接在浏览器中编辑，或上传在 bootimus 外部生成的文件。配置必须与集群节点镜像的提供方匹配。字段留空表示该项配置保持不变。",
+ "These Windows answer files replace the group or image choices for this client. Leave all unticked to inherit. A configured list waits for a choice, including automatic boots. A configured default is also offered.": "这些 Windows 应答文件会替换该客户端从客户端组或镜像继承的选择。全部不勾选则沿用继承值。一旦配置了列表，客户端需要手动选择（自动引导也不例外）。已配置的默认项同样会被提供。",
+ "These Windows answer files replace the image choices for this group. Leave all unticked to inherit. A configured list waits for a choice, including automatic boots. A configured default is also offered.": "这些 Windows 应答文件会替换该客户端组从镜像继承的选择。全部不勾选则沿用继承值。一旦配置了列表，客户端需要手动选择（自动引导也不例外）。已配置的默认项同样会被提供。",
+ "This instance mirrors a primary Bootimus and refuses changes. Make changes on the primary; they arrive here on the next sync.": "本实例是主 Bootimus 的只读镜像，会拒绝任何修改。请在主实例上进行修改；改动会在下次同步时送达这里。",
+ "Time before auto-booting the default entry. Set to 0 to disable (wait forever).": "自动引导默认引导项之前的等待时间。设为 0 表示禁用（一直等待）。",
+ "Tools": "工具",
+ "Unassigned": "未分配",
+ "Unattended installs reported through the": "通过以下方式回报的无人值守安装：",
+ "Unpatch SMB": "撤销 SMB 补丁",
+ "Update Client": "更新客户端",
+ "Update Cluster": "更新集群",
+ "Update Group": "更新客户端组",
+ "Update User": "更新用户",
+ "Updates Available": "有可用更新",
+ "Upload": "上传",
+ "Upload Auto-Install File": "上传自动安装文件",
+ "Upload File": "上传文件",
+ "Upload a backup produced by": "上传由以下版本生成的备份：",
+ "Upload files": "上传文件",
+ "Uploading…": "正在上传……",
+ "Used for images that have an unattended install unless the client sets its own file.": "用于带无人值守安装的镜像，除非客户端另行指定了自己的文件。",
+ "Used when squashfs is detected. Leave empty to use default params.": "检测到 squashfs 时使用。留空则使用默认参数。",
+ "User": "用户",
+ "Username": "用户名",
+ "Users": "用户",
+ "Verify": "校验",
+ "Version": "版本",
+ "Version ": "版本 ",
+ "View History": "查看历史",
+ "WOL Broadcast Override": "WOL 广播地址覆盖",
+ "Wake All (WOL)": "全部唤醒（WOL）",
+ "Wake-on-LAN after assigning": "分配后发送 Wake-on-LAN",
+ "Weekdays at 08:00": "工作日 08:00",
+ "Weekdays at 18:00": "工作日 18:00",
+ "Weekly, Sunday midnight": "每周，周日零点",
+ "When enabled, boot parameters will be automatically injected to use this script": "启用后，会自动注入引导参数以使用此脚本",
+ "Where to save on installed system": "在已安装系统中保存的位置",
+ "WinPE and rescue media often carry several WIM files. Pick the one wimboot should load and, for multi-image WIMs, which image inside it.": "WinPE 和救援介质通常包含多个 WIM 文件。请选择要让 wimboot 加载的那一个；对于多镜像 WIM，还需指定其中具体的镜像。",
+ "Worker machine config": "工作节点机器配置",
+ "ZIP Archive": "ZIP 归档",
+ "e.g. /live/filesystem.squashfs": "例如 /live/filesystem.squashfs",
+ "e.g. /live/initrd.img, /boot/initrd": "例如 /live/initrd.img、/boot/initrd",
+ "e.g. /live/vmlinuz, /boot/vmlinuz": "例如 /live/vmlinuz、/boot/vmlinuz",
+ "e.g. My Distro": "例如 My Distro",
+ "e.g. My Tool": "例如 My Tool",
+ "e.g. ansible": "例如 ansible",
+ "e.g. boot=live fetch={{SQUASHFS}}": "例如 boot=live fetch={{SQUASHFS}}",
+ "e.g. boot=live ip=dhcp": "例如 boot=live ip=dhcp",
+ "e.g. debian, arch, redhat": "例如 debian、arch、redhat",
+ "e.g. initrd.img (optional)": "例如 initrd.img（可选）",
+ "e.g. ipxe-1.21.1": "例如 ipxe-1.21.1",
+ "e.g. kiosk.xml, server.cfg": "例如 kiosk.xml、server.cfg",
+ "e.g. lab1-workstations": "例如 lab1-workstations",
+ "e.g. my-distro": "例如 my-distro",
+ "e.g. my-tool": "例如 my-tool",
+ "e.g. mydistro, my-distro": "例如 mydistro、my-distro",
+ "e.g. prod-cluster": "例如 prod-cluster",
+ "e.g. vmlinuz or tool.efi": "例如 vmlinuz 或 tool.efi",
+ "e.g. weekday-morning-wake": "例如 weekday-morning-wake",
+ "e.g., /root/setup.sh": "例如 /root/setup.sh",
+ "iPXE SAN URI:": "iPXE SAN 地址：",
+ "iSCSI, AoE or HTTP disk offered as \"Boot from SAN\" in this client's menu.": "在客户端菜单中以「从 SAN 引导」形式提供的 iSCSI、AoE 或 HTTP 磁盘。",
+ "iSCSI, AoE or HTTP disks that clients boot from with iPXE": "客户端通过 iPXE 引导的 iSCSI、AoE 或 HTTP 磁盘",
+ "min hour dom mon dow": "分 时 日 月 周",
+ "proxyDHCP is disabled, so Bootimus cannot see DHCP traffic. Only the built-in proxyDHCP responder can observe requests. Start Bootimus with": "proxyDHCP 已禁用，因此 Bootimus 无法看到 DHCP 流量。只有内置的 proxyDHCP 响应器才能观察到请求。请以如下参数启动 Bootimus：",
+ "sda, nvme0n1 or auto": "sda、nvme0n1 或 auto",
+ "📁 Click to select or drag & drop ISO file": "📁 点击选择或拖拽 ISO 文件"
+};
+
+  var ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
+  var SKIP_TAGS = { SCRIPT: 1, STYLE: 1, PRE: 1, CODE: 1, TEXTAREA: 1, KBD: 1, SAMP: 1 };
+  var SKIP_CLASS = 'zh-overlay-skip';
+
+  function active() {
+    return document.documentElement.lang === 'zh-CN';
+  }
+
+  function usable(el) {
+    for (var n = el; n && n.nodeType === 1; n = n.parentNode) {
+      if (SKIP_TAGS[n.tagName]) return false;
+      if (n.classList && n.classList.contains(SKIP_CLASS)) return false;
+      if (n.hasAttribute && n.hasAttribute('data-zh-skip')) return false;
+    }
+    return true;
+  }
+
+  function translateText(node) {
+    var raw = node.nodeValue;
+    if (!raw) return;
+    var trimmed = raw.trim();
+    if (!trimmed || trimmed.length > 400) return;
+    var zh = ZH[trimmed];
+    if (!zh) return;
+    if (!usable(node.parentNode)) return;
+    var start = raw.indexOf(trimmed);
+    node.nodeValue = raw.slice(0, start) + zh + raw.slice(start + trimmed.length);
+  }
+
+  function translateAttrs(el) {
+    if (!el.getAttribute) return;
+    if (!usable(el)) return;
+    for (var i = 0; i < ATTRS.length; i++) {
+      var a = ATTRS[i];
+      var v = el.getAttribute(a);
+      if (!v) continue;
+      var tv = v.trim();
+      var zh = ZH[tv];
+      if (zh && zh !== v) el.setAttribute(a, zh);
+    }
+  }
+
+  function walk(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { translateText(root); return; }
+    if (root.nodeType !== 1 && root.nodeType !== 9 && root.nodeType !== 11) return;
+
+    if (root.nodeType === 1) translateAttrs(root);
+
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+    var n, batch = [];
+    while ((n = walker.nextNode())) batch.push(n);
+    for (var i = 0; i < batch.length; i++) translateText(batch[i]);
+
+    if (root.querySelectorAll) {
+      var els = root.querySelectorAll('[placeholder],[title],[aria-label],[alt]');
+      for (var j = 0; j < els.length; j++) translateAttrs(els[j]);
+    }
+  }
+
+  var busy = false;
+  function run(root) {
+    if (!active() || busy) return;
+    busy = true;
+    try { walk(root || document.body); } finally { busy = false; }
+  }
+
+  function observe() {
+    var mo = new MutationObserver(function (records) {
+      if (!active()) return;
+      for (var i = 0; i < records.length; i++) {
+        var r = records[i];
+        if (r.type === 'characterData') { run(r.target); continue; }
+        for (var j = 0; j < r.addedNodes.length; j++) {
+          var node = r.addedNodes[j];
+          if (node.nodeType === 1 || node.nodeType === 3) run(node);
+        }
+      }
+    });
+    mo.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  function boot() {
+    run(document.body);
+    observe();
+
+    // Re-run after the upstream language switcher changes the UI.
+    if (typeof window.setLanguage === 'function') {
+      var original = window.setLanguage;
+      window.setLanguage = function (lang) {
+        original.apply(this, arguments);
+        setTimeout(function () { run(document.body); }, 0);
+      };
+    }
+
+    // Late renders (modals, tables, logs) that swap innerHTML wholesale.
+    setInterval(function () { run(document.body); }, 1500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(boot, 0); });
+  } else {
+    boot();
+  }
+
+  window.__zhOverlay = { run: run, count: function () { return Object.keys(ZH).length; } };
+})();
