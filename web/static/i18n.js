@@ -1701,6 +1701,9 @@ const TRANSLATIONS = {
         'server.value.smb_active': '已启用（{{n}} 个共享，端口 {{port}}）',
         'server.value.patcher_missing': '不可用（安装 wimtools / wimlib-imagex 后方可为 boot.wim 打补丁）',
 
+        'server.scan.done': '扫描完成。发现 {{added}} 个新镜像，移除 {{removed}} 个失效镜像。',
+        'images.group_toggle': '分组显示',
+
         'lang.label': '语言',
     },
 };

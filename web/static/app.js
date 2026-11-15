@@ -3204,8 +3204,29 @@ function imageRowHTML(img, includeGroupCell, depth = 0) {
                     </tr>`;
 }
 
+// Both table toolbars use the same bare "Group" label. Only the images one is
+// asked to read 分组显示, so set it explicitly and mark the button data-zh-skip
+// so the runtime overlay stops translating that node back to 分组.
+function localiseImageGroupToggle() {
+    const btn = document.getElementById('images-group-toggle');
+    if (!btn || typeof currentLanguage !== 'function') return;
+    const zh = currentLanguage() === 'zh-CN';
+    if (zh) btn.setAttribute('data-zh-skip', '');
+    else btn.removeAttribute('data-zh-skip');
+    for (let i = btn.childNodes.length - 1; i >= 0; i--) {
+        const n = btn.childNodes[i];
+        if (n.nodeType === Node.TEXT_NODE && n.nodeValue.trim()) {
+            n.nodeValue = n.nodeValue.replace(/\S[\s\S]*/, zh ? '分组显示' : 'Group');
+            return;
+        }
+    }
+}
+
 function renderImagesTable() {
     const container = document.getElementById('images-table');
+
+    // Before the empty-state early return, so the label is right either way.
+    localiseImageGroupToggle();
 
     if (images.length === 0 && pendingUploads.size === 0) {
         container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px;">No images yet. Upload or scan for ISOs.</p>';
@@ -3391,13 +3412,24 @@ async function deleteImage(filename, name) {
     }
 }
 
+// The ISO scan result is built server-side ("Scan complete. Found N new images,
+// removed N missing images.") and shown verbatim. Translate it for zh-CN while
+// keeping the two counts.
+function scanResultLabel(message) {
+    if (typeof currentLanguage === 'function' && currentLanguage() !== 'zh-CN') return message;
+    const raw = String(message == null ? '' : message);
+    const m = raw.match(/^Scan complete\. Found (\d+) new images?, removed (\d+) missing images?\.$/);
+    if (m) return t('server.scan.done', { added: m[1], removed: m[2] });
+    return raw;
+}
+
 async function scanImages() {
     try {
         const res = await authFetch(`${API_BASE}/scan`, { method: 'POST' });
         const data = await res.json();
 
         if (data.success) {
-            showAlert(data.message, 'success');
+            showAlert(scanResultLabel(data.message), 'success');
             loadImages();
             loadStats();
         } else {
