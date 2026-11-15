@@ -106,6 +106,8 @@ const TRANSLATIONS = {
         'server.config.proxy_dhcp': 'Proxy DHCP',
         'server.config.windows_smb': 'Windows SMB',
         'server.config.windows_smb_patcher': 'Windows SMB Patcher',
+        'bulk.count.clients': '{{n}} client(s)',
+        'bulk.count.images': '{{n}} image(s)',
         'server.config.admin_tls': 'Admin Tls',
         'server.config.oidc_enabled': 'Oidc Enabled',
 
@@ -1703,6 +1705,9 @@ const TRANSLATIONS = {
 
         'server.scan.done': '扫描完成。发现 {{added}} 个新镜像，移除 {{removed}} 个失效镜像。',
         'images.group_toggle': '分组显示',
+
+        'bulk.count.clients': '{{n}} 个客户端',
+        'bulk.count.images': '{{n}} 个镜像',
 
         'lang.label': '语言',
     },

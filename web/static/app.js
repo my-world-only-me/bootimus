@@ -1594,7 +1594,7 @@ async function openBulkAssignClientGroupModal() {
         }
     } catch (e) {}
     const n = selectedClientMacs.size;
-    document.getElementById('bulk-assign-client-group-count').textContent = n + ' client' + (n === 1 ? '' : 's');
+    document.getElementById('bulk-assign-client-group-count').textContent = t('bulk.count.clients', { n: n });
     openModal('bulk-assign-client-group-modal');
 }
 
@@ -3017,7 +3017,7 @@ async function openBulkAssignGroupModal() {
         select.innerHTML += `<option value="${group.id}">${escapeHtml(group.name)}</option>`;
     }
     const n = selectedImageFilenames.size;
-    document.getElementById('bulk-assign-group-count').textContent = n + ' image' + (n === 1 ? '' : 's');
+    document.getElementById('bulk-assign-group-count').textContent = t('bulk.count.images', { n: n });
     openModal('bulk-assign-group-modal');
 }
 
