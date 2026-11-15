@@ -106,8 +106,8 @@ const TRANSLATIONS = {
         'server.config.proxy_dhcp': 'Proxy DHCP',
         'server.config.windows_smb': 'Windows SMB',
         'server.config.windows_smb_patcher': 'Windows SMB Patcher',
-        'server.config.admin_tls': 'Admin TLS',
-        'server.config.oidc_enabled': 'OIDC Enabled',
+        'server.config.admin_tls': 'Admin Tls',
+        'server.config.oidc_enabled': 'Oidc Enabled',
 
         'stats.total_clients': 'Total Clients',
         'stats.active_clients': 'Active Clients',
